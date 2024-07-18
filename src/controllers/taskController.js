@@ -11,6 +11,16 @@ exports.getAllTasks = async (req, res, next) => {
   }
 };
 
+exports.getUserTasks = async (req, res, next) => {
+  try {
+    req.query.user = req.user._id;
+    const result = await handleQueryParams(Task, req.query, 'title');
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
 exports.createTask = async (req, res, next) => {
   try {
     const { title, description, type, shared, category } = req.body;
