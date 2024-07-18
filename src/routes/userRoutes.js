@@ -27,15 +27,6 @@ router.post('/login', async (req, res, next) => {
   res.json(user);
 });
 
-router.get('/history', authenticateUser, async (req, res, next) => {
-  const userId = req.user._id;
-  const [err, loginHistory] = await asyncWrapper(UsersController.getLoginHistory(userId));
-  if (err) {
-    return next(err);
-  }
-  res.json(loginHistory);
-});
-
 router.post('/logout', authenticateUser, async (req, res, next) => {
   const { authorization: token } = req.headers;
   const [err] = await asyncWrapper(UsersController.logoutUser({ token }));
