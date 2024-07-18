@@ -16,6 +16,15 @@ const checkDuplicateCategoryName = async (name, userId, excludeId = null) => {
 
 exports.getAllCategories = async (req, res) => {
   try {
+    const result = await handleQueryParams(Category, req.query, 'name');
+    res.json(result);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message });
+  }
+};
+
+exports.getUserCategories = async (req, res) => {
+  try {
     req.query.user = req.user._id;
     const result = await handleQueryParams(Category, req.query, 'name');
     res.json(result);

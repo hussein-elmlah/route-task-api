@@ -1,61 +1,60 @@
-const Category = require('../models/Category.js');
+const Task = require('../models/Task.js');
 const CustomError = require('../lib/customError.js');
-const { handleQueryParams } = require('../utils/queryHelpers.js');
+const { handleQueryParams } = require('../utils/handleQueryParams.js');
 
-exports.getAllCategories = async (req, res, next) => {
+exports.getAllTasks = async (req, res, next) => {
   try {
-    const result = await handleQueryParams(Category, req.query, 'name');
+    const result = await handleQueryParams(Task, req.query, 'title');
     res.json(result);
   } catch (error) {
     next(error);
   }
 };
 
-exports.createCategory = async (req, res, next) => {
+exports.createTask = async (req, res, next) => {
   try {
-    const { name } = req.body;
-    const userId = req.user._id;
+    const { title, description, type, shared, category } = req.body;
 
-    const newCategory = await Category.create({ name, userId });
+    const newTask = await Task.create({ title, description, type, shared, category });
 
-    res.status(201).json(newCategory);
+    res.status(201).json(newTask);
   } catch (error) {
     next(error);
   }
 };
 
-exports.updateCategory = async (req, res, next) => {
+exports.updateTask = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { title, description, type, shared, category } = req.body;
 
-    const updatedCategory = await Category.findByIdAndUpdate(
+    const updatedTask = await Task.findByIdAndUpdate(
       id,
-      { name },
+      { title, description, type, shared, category },
       { new: true, runValidators: true }
     );
 
-    if (!updatedCategory) {
-      throw new CustomError('Category not found', 404);
+    if (!updatedTask) {
+      throw new CustomError('Task not found', 404);
     }
 
-    res.json(updatedCategory);
+    res.json(updatedTask);
   } catch (error) {
     next(error);
   }
 };
 
-exports.deleteCategory = async (req, res, next) => {
+exports.deleteTask = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const deletedCategory = await Category.findByIdAndDelete(id);
+    const deletedTask = await Task.findByIdAndDelete(id);
 
-    if (!deletedCategory) {
-      throw new CustomError('Category not found', 404);
+    if (!deletedTask) {
+      throw new CustomError('Task not found', 404);
     }
 
-    res.json({ message: 'Category deleted successfully' });
+    res.json({ message: 'Task deleted successfully' });
   } catch (error) {
     next(error);
   }
