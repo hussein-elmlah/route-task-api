@@ -9,6 +9,7 @@ exports.handleQueryParams = async function(model, queryParams, defaultSearchFiel
     search,
     user,
     category,
+    shared,
     searchField,
     ...filters
   } = queryParams;
@@ -22,9 +23,6 @@ exports.handleQueryParams = async function(model, queryParams, defaultSearchFiel
   }
 
   let filterConditions = {};
-
-  // Override defaultSearchField if searchField is provided in queryParams
-  const effectiveSearchField = searchField || defaultSearchField;
 
   if (search && effectiveSearchField) {
     const searchRegex = new RegExp(search, "i");
@@ -49,6 +47,11 @@ exports.handleQueryParams = async function(model, queryParams, defaultSearchFiel
     }
     const categoryIds = categoryDocs.map(doc => doc._id);
     filterConditions.category = { $in: categoryIds };
+  }
+
+  // boolean conversion
+  if (shared) {
+    filterConditions.shared = shared === 'true' || shared === '1' ? true : shared === 'false' || shared === '0' ? false : undefined;
   }
 
   const startIndex = (parsedPage - 1) * parsedLimit;

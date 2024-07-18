@@ -2,8 +2,9 @@ const Task = require('../models/Task.js');
 const CustomError = require('../lib/customError.js');
 const { handleQueryParams } = require('../utils/handleQueryParams.js');
 
-exports.getAllTasks = async (req, res, next) => {
+exports.getPublicTasks = async (req, res, next) => {
   try {
+    req.query.shared = "true";
     const result = await handleQueryParams(Task, req.query, 'title');
     res.json(result);
   } catch (error) {
