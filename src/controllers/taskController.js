@@ -15,10 +15,11 @@ exports.createTask = async (req, res, next) => {
   try {
     const { title, description, type, shared, category } = req.body;
 
-    const newTask = await Task.create({ title, description, type, shared, category });
+    const newTask = await Task.create({ title, description, type, shared, category, user:req.user._id });
 
     res.status(201).json(newTask);
   } catch (error) {
+    console.log(error)
     next(error);
   }
 };
