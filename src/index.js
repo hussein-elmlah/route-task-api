@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const userRoutes = require('./routes/userRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const taskRoutes = require('./routes/taskRoutes');
 
 const errorHandler = require('./middlewares/errorHandler');
 
@@ -30,7 +32,8 @@ app.use(cors()); // should be confirued in production
 // }));
 
 app.use('/users', userRoutes);
-
+app.use('/categories', categoryRoutes);
+app.use('/tasks', taskRoutes);
 
 app.use('*', (req, res) => {
   res.status(404).send('Not found');
